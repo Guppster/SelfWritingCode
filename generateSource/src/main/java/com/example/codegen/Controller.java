@@ -1,5 +1,6 @@
 package com.example.codegen;
 
+import com.example.codegen.resources.Properties;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
@@ -10,16 +11,16 @@ public class Controller
 {
     public static void main(String[] args)
     {
-        typeSafeConfTesting();
-
         //Get the variables from configuration
+        Properties config = getTypeSafeConfig();
 
         //Populate the template with variables
+
 
         //Run the program
     }
 
-    private static void typeSafeConfTesting()
+    private static Properties getTypeSafeConfig()
     {
         File configFile = new File("/home/gsingh/Documents/Projects/config.conf");
 
@@ -47,6 +48,8 @@ public class Controller
                 .setOriginComments(false);
 
         System.out.println(tsConfig.root().render(options));
+
+        return config;
     }
 
 }
