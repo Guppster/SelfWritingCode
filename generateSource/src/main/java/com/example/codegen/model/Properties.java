@@ -1,4 +1,4 @@
-package com.example.codegen.resources;
+package com.example.codegen.model;
 
 import com.typesafe.config.Config;
 

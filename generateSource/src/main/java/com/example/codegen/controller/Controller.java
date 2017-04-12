@@ -1,6 +1,6 @@
-package com.example.codegen;
+package com.example.codegen.controller;
 
-import com.example.codegen.resources.Properties;
+import com.example.codegen.model.Properties;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
