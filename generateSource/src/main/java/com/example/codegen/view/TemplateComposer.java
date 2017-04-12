@@ -3,14 +3,19 @@ package com.example.codegen.view;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import com.typesafe.config.Config;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 
 public class TemplateComposer
 {
-    public static void main(String[] args)
+    public TemplateComposer(Config config)
     {
+        //Extracts the name of the specific template that needs to be generated
+        //and populates that templates fields
+
+
 
     }
 
