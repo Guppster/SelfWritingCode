@@ -1,4 +1,4 @@
-package com.example.codegen.view;
+package com.example.codegen.view.templates;
 
 /**
  * This class defines what each template must be able to do
@@ -9,7 +9,7 @@ public interface Template
     void initialize();
 
     //Must be able to generate the main execution of the method
-    String generate();
+    void generate();
 
     String build();
 }

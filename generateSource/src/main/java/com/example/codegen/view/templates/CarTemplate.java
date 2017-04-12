@@ -1,4 +1,4 @@
-package com.example.codegen.view;
+package com.example.codegen.view.templates;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;

@@ -6,11 +6,13 @@ public class Properties
 {
     public final Properties.Car    Car;
     public final Properties.Person Person;
+    public final String ClassName;
 
     public Properties(Config c)
     {
         this.Car = new Properties.Car(c.getConfig("Car"));
         this.Person = new Properties.Person(c.getConfig("Person"));
+        this.ClassName = c.getString("ClassName");
     }
 
     public static class Car

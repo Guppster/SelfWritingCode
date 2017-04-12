@@ -1,47 +1,44 @@
 package com.example.codegen.view;
 
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-import com.typesafe.config.Config;
+import com.example.codegen.model.Properties;
+import com.example.codegen.view.templates.Template;
+import org.reflections.Reflections;
 
-import javax.lang.model.element.Modifier;
-import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 public class TemplateComposer
 {
-    public TemplateComposer(Config config)
+    static Template template;
+
+    public TemplateComposer(Properties config)
     {
         //Extracts the name of the specific template that needs to be generated
         //and populates that templates fields
 
+        Reflections reflections = new Reflections("com.example.codegen.view.templates");
 
+        Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
+
+        Class<?> theClass = allClasses.stream().filter(aClass -> aClass.getSimpleName().equals(config.ClassName)).findAny().orElse(null);
+
+        try
+        {
+            template = (Template) theClass.getConstructor().newInstance();
+        } catch (InstantiationException |
+                IllegalAccessException |
+                InvocationTargetException |
+                NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
     private static void generateBase()
     {
-        MethodSpec main = MethodSpec.methodBuilder("main")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(void.class)
-                .addParameter(String[].class, "args")
-                .addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
-                .build();
-
-        TypeSpec helloWorld = TypeSpec.classBuilder("HelloWorld")
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addMethod(main)
-                .build();
-
-        JavaFile javaFile = JavaFile.builder("com.example.helloworld", helloWorld)
-                .build();
-
-        try
-        {
-            javaFile.writeTo(System.out);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        template.initialize();
+        template.generate();
+        System.out.println(template.build());
     }
 }
