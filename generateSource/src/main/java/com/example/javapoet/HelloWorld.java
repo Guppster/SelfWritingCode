@@ -20,7 +20,7 @@ public class HelloWorld
                 .addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
                 .build();
 
-        TypeSpec helloWorld = TypeSpec.classBuilder("HelloWorldGenerated")
+        TypeSpec helloWorld = TypeSpec.classBuilder("MemberInteraction")
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(main)
                 .build();
