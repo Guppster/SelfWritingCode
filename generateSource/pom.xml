@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>generateSource</groupId>
-    <artifactId>JavaPoet</artifactId>
+    <artifactId>CodeGen</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -19,6 +19,18 @@
             <artifactId>javapoet</artifactId>
             <version>1.8.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.watertemplate</groupId>
+            <artifactId>watertemplate-engine</artifactId>
+            <version>1.2.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -28,7 +40,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.example.javapoet.HelloWorld</mainClass>
+                    <mainClass>com.example.codegen.Controller</mainClass>
                 </configuration>
             </plugin>
         </plugins>
