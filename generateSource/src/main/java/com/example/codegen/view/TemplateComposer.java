@@ -9,13 +9,12 @@ import java.util.Set;
 
 public class TemplateComposer
 {
-    static Template template;
+    private Template template;
 
     public TemplateComposer(Properties config)
     {
         //Extracts the name of the specific template that needs to be generated
         //and populates that templates fields
-
         Reflections reflections = new Reflections("com.example.codegen.view.templates");
 
         Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
@@ -35,10 +34,10 @@ public class TemplateComposer
 
     }
 
-    private static void generateBase()
+    public String construct()
     {
         template.initialize();
         template.generate();
-        System.out.println(template.build());
+        return template.build();
     }
 }

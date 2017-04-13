@@ -1,6 +1,7 @@
 package com.example.codegen.controller;
 
 import com.example.codegen.model.Properties;
+import com.example.codegen.view.TemplateComposer;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
@@ -15,9 +16,13 @@ public class Controller
         Properties config = getTypeSafeConfig();
 
         //Populate the template with variables
+        TemplateComposer composer = new TemplateComposer(config);
 
+        //Test class constructing
+        System.out.println(composer.construct());
 
         //Run the program
+
     }
 
     private static Properties getTypeSafeConfig()
