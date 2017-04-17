@@ -31,10 +31,15 @@ public abstract class CarTemplate implements Template
     public String build()
     {
         JavaFile javafile = JavaFile
-                .builder("com.example.helloworld", car.build())
+                .builder("com.example.codegen", car.build())
                 .build();
 
         return javafile.toString();
     }
 
+    @Override
+    public void construct()
+    {
+        car.addMethod(main.build());
+    }
 }

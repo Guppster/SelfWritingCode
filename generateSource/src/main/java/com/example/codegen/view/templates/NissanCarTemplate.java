@@ -1,14 +1,16 @@
 package com.example.codegen.view.templates;
 
-/**
- * Created by gsingh on 12/04/17.
- */
+import com.example.codegen.model.Properties;
+
 public class NissanCarTemplate extends JDMCarTemplate
 {
     @Override
-    public void generate()
+    public void generate(Properties config)
     {
-        super.generate();
+        //Call The JDM generate
+        super.generate(config);
+
         //Apply Nissan specific code changes
+        main.addStatement("$T.out.println($S)", System.class, "More Specifically a Nissan Car");
     }
 }
