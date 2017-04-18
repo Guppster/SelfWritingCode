@@ -1,10 +1,7 @@
 package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
-import madison.mpi.IxnMemGet;
 import madison.mpi.KeyType;
-import madison.mpi.MemHead;
-import madison.mpi.MemRowList;
 
 public class IxnMemGetTemplate extends IxnMemTemplate
 {
@@ -20,16 +17,12 @@ public class IxnMemGetTemplate extends IxnMemTemplate
         //Call the IxnMem generate
         super.generate(config);
 
+
         main
-                .addStatement("$1T memGet = new $1T($2N)", IxnMemGet.class, "context")
-                .addStatement("$1T inputRows = new $1T", MemRowList.class)
-                .addStatement("$1T outputRows = new $1T", MemRowList.class)
-                .addStatement("$1T memHead = new $1T", MemHead.class)
-                .addStatement("$1T keyType = new $1T", KeyType.class)
-                .addStatement("memGet.setEntType($S)", config.interaction.entType)
-                .addStatement("memGet.setMemStatFilter($S)", config.interaction.memStatusFilter)
-                .addStatement("memGet.setRecStatFilter($S)", config.interaction.recStatusFilter)
-                .addStatement("memGet.setSegCodeFilter($S)", config.interaction.segCodeFilter);
+                .addStatement("ixn.setEntType($S)", config.interaction.entType)
+                .addStatement("ixn.setMemStatFilter($S)", config.interaction.memStatusFilter)
+                .addStatement("ixn.setRecStatFilter($S)", config.interaction.recStatusFilter)
+                .addStatement("ixn.setSegCodeFilter($S)", config.interaction.segCodeFilter);
 
 
         //Use provided information to generate interaction in different ways
@@ -38,13 +31,15 @@ public class IxnMemGetTemplate extends IxnMemTemplate
             main
                     .addStatement("keyType = $N", KeyType.MEMRECNO)
                     .addStatement("memHead.setMemRecno($L)", config.interaction.memRecNum);
-        } else if (config.interaction.memIDNum != null && config.interaction.memSrcCode != null)
+        }
+        else if (config.interaction.memIDNum != null && config.interaction.memSrcCode != null)
         {
             main
                     .addStatement("keyType = $N", KeyType.MEMIDNUM)
                     .addStatement("memHead.setMemIdnum($S)", config.interaction.memIDNum)
                     .addStatement("memHead.setSrcCode($S)", config.interaction.memSrcCode);
-        } else if (config.interaction.entRecNum > 0)
+        }
+        else if (config.interaction.entRecNum > 0)
         {
             main
                     .addStatement("keyType = $N", KeyType.ENTRECNO)
@@ -53,12 +48,12 @@ public class IxnMemGetTemplate extends IxnMemTemplate
 
         if (config.interaction.compositeView != null)
         {
-            main.addStatement("memGet.setCvwName($S)", config.interaction.compositeView);
+            main.addStatement("ixn.setCvwName($S)", config.interaction.compositeView);
         }
 
         main.addStatement("inputRows.addRow(memHead)");
 
-        main.addStatement("$T status = memGet.execute(inputRows, outputRows, GetType.$S, keytype", boolean.class, config.interaction.getType.toUpperCase());
+        main.addStatement("$T status = ixn.execute(inputRows, outputRows, GetType.$N, keyType)", boolean.class, config.interaction.getType.toUpperCase());
     }
 
     @Override

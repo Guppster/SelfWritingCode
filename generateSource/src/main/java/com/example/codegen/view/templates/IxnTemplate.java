@@ -1,6 +1,7 @@
 package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
@@ -37,11 +38,13 @@ public abstract class IxnTemplate implements Template
 
     public void generate(Properties config)
     {
+        ClassName ixnType = ClassName.get("madison.mpi", config.interactionName.replace("Template", ""));
+
         //Create context fields (not really needed but maybe useful)
-        ixnClass.addField(String.class, "host");
-        ixnClass.addField(String.class, "user");
-        ixnClass.addField(String.class, "pass");
-        ixnClass.addField(Integer.class, "port");
+        ixnClass.addField(String.class, "host", Modifier.PRIVATE);
+        ixnClass.addField(String.class, "user", Modifier.PRIVATE);
+        ixnClass.addField(String.class, "pass", Modifier.PRIVATE);
+        ixnClass.addField(Integer.class, "port", Modifier.PRIVATE);
 
         //Add context initialization to the constructor
         constructor
@@ -52,8 +55,8 @@ public abstract class IxnTemplate implements Template
                 .addStatement("$1T context = new $1T($2N,$3N,$4N,$5N)", Context.class, "host", "user", "pass", "port")
                 .beginControlFlow("if(!context.isConnected())")
                 .addStatement("$T.err.println($S)", System.class, "Unable to get a Context")
-                .endControlFlow();
-
+                .endControlFlow()
+                .addStatement("$1T ixn = new $1T($2N)", ixnType, "context");
     }
 
     @Override
