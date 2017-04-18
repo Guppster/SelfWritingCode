@@ -39,7 +39,7 @@ public class TemplateComposer
 
 
         //Extracts the name of the specific template that needs to be generated
-        Class<?> theClass = allClasses.stream().filter(aClass -> aClass.getSimpleName().equals(config.ClassName)).findAny().orElse(null);
+        Class<?> theClass = allClasses.stream().filter(aClass -> aClass.getSimpleName().equals(config.interactionName)).findAny().orElse(null);
 
         //Create a new instance of that class
         try
