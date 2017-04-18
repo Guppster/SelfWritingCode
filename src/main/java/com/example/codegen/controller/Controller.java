@@ -25,7 +25,7 @@ public class Controller
 
     private static Properties getTypeSafeConfig()
     {
-        File configFile = new File("/home/gsingh/Documents/Projects/SelfWritingCode/generateSource/config.conf");
+        File configFile = new File("/home/gsingh/Documents/Projects/SelfWritingCode/config.conf");
 
         // usual Typesafe Config mechanism to load the file
         Config tsConfig = ConfigFactory.parseFile(configFile).resolve();

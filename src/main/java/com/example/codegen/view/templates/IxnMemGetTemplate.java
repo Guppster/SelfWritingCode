@@ -17,13 +17,11 @@ public class IxnMemGetTemplate extends IxnMemTemplate
         //Call the IxnMem generate
         super.generate(config);
 
-
         main
                 .addStatement("ixn.setEntType($S)", config.interaction.entType)
                 .addStatement("ixn.setMemStatFilter($S)", config.interaction.memStatusFilter)
                 .addStatement("ixn.setRecStatFilter($S)", config.interaction.recStatusFilter)
                 .addStatement("ixn.setSegCodeFilter($S)", config.interaction.segCodeFilter);
-
 
         //Use provided information to generate interaction in different ways
         if (config.interaction.memRecNum > 0)
