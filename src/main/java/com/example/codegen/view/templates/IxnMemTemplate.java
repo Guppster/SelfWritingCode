@@ -40,5 +40,7 @@ public abstract class IxnMemTemplate extends IxnTemplate
                     .addStatement("keyType = KeyType.ENTRECNO")
                     .addStatement("memHead.setEntRecnos(new $N{$L}", Long.class, config.interaction.entRecNum);
         }
+
+        main.addStatement("inputRows.addRow(memHead)");
     }
 }

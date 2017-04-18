@@ -27,8 +27,6 @@ public class IxnMemGetTemplate extends IxnMemTemplate
             main.addStatement("ixn.setCvwName($S)", config.interaction.compositeView);
         }
 
-        main.addStatement("inputRows.addRow(memHead)");
-
         main.addStatement("$T status = ixn.execute(inputRows, outputRows, GetType.$N, keyType)", boolean.class, config.interaction.getType.toUpperCase());
     }
 
