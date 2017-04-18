@@ -37,7 +37,6 @@ public class TemplateComposer
 
         Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
 
-
         //Extracts the name of the specific template that needs to be generated
         Class<?> theClass = allClasses.stream().filter(aClass -> aClass.getSimpleName().equals(config.interactionName)).findAny().orElse(null);
 

@@ -34,6 +34,7 @@ public class Properties
     public static class Interaction
     {
         public final String entType;            //Entity type
+        public final String memType;            //Member Type
         public final String memSrcCode;         //Member source code
         public final String memIDNum;           //Member ID Number
         public final String segCodeFilter;      //Filter specfic segments
@@ -47,17 +48,22 @@ public class Properties
 
         public Interaction(Config config)
         {
-            this.entType = config.getString("entity type");
+            this.entType = config.getString("entityType");
 
-            this.memSrcCode = config.hasPathOrNull("member source code") ?
-                              config.getString("member source code") :
+            // Member types are listed in mpi_memtype table.
+            this.memType = config.hasPathOrNull("member type") ?
+                           config.getString("member type") :
+                           "PERSON";
+
+            this.memSrcCode = config.hasPathOrNull("memberSourceCode") ?
+                              config.getString("memberSourceCode") :
                               null;
 
             // ASMEMBER specifies that only individual members will be retrieve.
             // ASENTITY specifies entities will be retrieve.
             this.getType = config.hasPathOrNull("getType") ?
-                              config.getString("getType") :
-                              "ASENTITY";
+                           config.getString("getType") :
+                           "ASENTITY";
 
             // Set a segment code filter to limit output to specific segments.
             // MEMHEAD, MEMATTR, MEMNAME, MEMADDR, MEMPHONE, MEMIDENT, MEMDATE
@@ -81,8 +87,8 @@ public class Properties
                                  config.getString("composite view") :
                                  null;
 
-            this.memIDNum = config.hasPathOrNull("member ID number") ?
-                            config.getString("member ID number") :
+            this.memIDNum = config.hasPathOrNull("memberIDNumber") ?
+                            config.getString("memberIDNumber") :
                             null;
 
             this.memRecNum = config.hasPathOrNull("member record number") ?

@@ -18,31 +18,9 @@ public class IxnMemGetTemplate extends IxnMemTemplate
         super.generate(config);
 
         main
-                .addStatement("ixn.setEntType($S)", config.interaction.entType)
                 .addStatement("ixn.setMemStatFilter($S)", config.interaction.memStatusFilter)
                 .addStatement("ixn.setRecStatFilter($S)", config.interaction.recStatusFilter)
                 .addStatement("ixn.setSegCodeFilter($S)", config.interaction.segCodeFilter);
-
-        //Use provided information to generate interaction in different ways
-        if (config.interaction.memRecNum > 0)
-        {
-            main
-                    .addStatement("keyType = $N", KeyType.MEMRECNO)
-                    .addStatement("memHead.setMemRecno($L)", config.interaction.memRecNum);
-        }
-        else if (config.interaction.memIDNum != null && config.interaction.memSrcCode != null)
-        {
-            main
-                    .addStatement("keyType = $N", KeyType.MEMIDNUM)
-                    .addStatement("memHead.setMemIdnum($S)", config.interaction.memIDNum)
-                    .addStatement("memHead.setSrcCode($S)", config.interaction.memSrcCode);
-        }
-        else if (config.interaction.entRecNum > 0)
-        {
-            main
-                    .addStatement("keyType = $N", KeyType.ENTRECNO)
-                    .addStatement("memHead.setEntRecnos(new $N{$L}", Long.class, config.interaction.entRecNum);
-        }
 
         if (config.interaction.compositeView != null)
         {
