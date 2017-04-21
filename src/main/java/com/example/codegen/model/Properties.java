@@ -3,10 +3,11 @@ package com.example.codegen.model;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static com.typesafe.config.ConfigUtil.splitPath;
 
 public class Properties
 {
@@ -22,14 +23,22 @@ public class Properties
         this.interaction = new Properties.Interaction(c.getConfig("interaction"));
         this.rows = new ArrayList<>();
 
-        for (Config row : this.interaction.attrbuteRows)
+        if (this.interaction.attrbuteRows != null)
         {
-            rows.add(new AttributeRow(row));
-        }
+            for (Config row : this.interaction.attrbuteRows)
+            {
+                rows.add(new AttributeRow(row));
+            }
 
-        System.out.println(this.rows.get(0).code);
-        System.out.println(this.rows.get(1).code);
-        System.out.println(this.rows.get(2).code);
+            //Demonstrates how each key value pair can be read from a nested config
+            for (AttributeRow row : rows)
+            {
+                for (Map.Entry<String, ConfigValue> entry: row.attributes.entrySet())
+                {
+                    System.out.println("Key:" + entry.getKey() + ". Value: " + entry.getValue().unwrapped());
+                }
+            }
+        }
     }
 
     public static class Context
@@ -124,19 +133,26 @@ public class Properties
                               config.getInt("task record number") :
                               -1;
 
-            this.attrbuteRows = config.getConfigList("attributeRows");
+            this.attrbuteRows = config.hasPathOrNull("attributeRows") ?
+                                config.getConfigList("attributeRows") :
+                                null;
         }
     }
 
     public static class AttributeRow
     {
-        public final Set<Map.Entry<String, ConfigValue>> attributes;
+        public final Map<String, ConfigValue> attributes;
         public final String                              code;
 
         public AttributeRow(Config config)
         {
             this.code = config.getString("code");
-            this.attributes = config.getConfig("attributes").root().entrySet();
+            this.attributes = config
+                    .getConfig("attributes")
+                    .root()
+                    .entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
         }
     }
 }
