@@ -29,15 +29,6 @@ public class Properties
             {
                 rows.add(new AttributeRow(row));
             }
-
-            //Demonstrates how each key value pair can be read from a nested config
-            for (AttributeRow row : rows)
-            {
-                for (Map.Entry<String, ConfigValue> entry: row.attributes.entrySet())
-                {
-                    System.out.println("Key:" + entry.getKey() + ". Value: " + entry.getValue().unwrapped());
-                }
-            }
         }
     }
 
@@ -67,6 +58,7 @@ public class Properties
         public final String memType;            //Member Type
         public final String memSrcCode;         //Member source code
         public final String memIDNum;           //Member ID Number
+        public final String memMode;            //Member update mode
         public final String segCodeFilter;      //Filter specfic segments
         public final String recStatusFilter;    //Filter record status indicators
         public final String memStatusFilter;    //Filter member status indicators
@@ -75,6 +67,7 @@ public class Properties
         public final long   memRecNum;          //Member record number
         public final long   entRecNum;          //Entity record number
         public final long   taskRecNum;         //Task record number
+        public final long entPriority;          //Entity management priority
 
         public Interaction(Config config)
         {
@@ -84,6 +77,11 @@ public class Properties
             this.memType = config.hasPathOrNull("member type") ?
                            config.getString("member type") :
                            "PERSON";
+
+            // Member update mode
+            this.memMode = config.hasPathOrNull("memberMode") ?
+                           config.getString("memberMode") :
+                           "Partial";
 
             this.memSrcCode = config.hasPathOrNull("memberSourceCode") ?
                               config.getString("memberSourceCode") :
@@ -132,6 +130,10 @@ public class Properties
             this.taskRecNum = config.hasPathOrNull("task record number") ?
                               config.getInt("task record number") :
                               -1;
+
+            this.entPriority = config.hasPathOrNull("entityPriority") ?
+                              config.getInt("entityPriority") :
+                              0;
 
             this.attrbuteRows = config.hasPathOrNull("attributeRows") ?
                                 config.getConfigList("attributeRows") :
