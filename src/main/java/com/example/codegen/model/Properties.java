@@ -64,10 +64,11 @@ public class Properties
         public final String memStatusFilter;    //Filter member status indicators
         public final String compositeView;      //Set a composite view
         public final String getType;            //ASMEMBER or ASENTITY (single member or single entity)
+        public final String searchType;            //ASMEMBER or ASENTITY (single member or single entity)
         public final long   memRecNum;          //Member record number
         public final long   entRecNum;          //Entity record number
         public final long   taskRecNum;         //Task record number
-        public final long entPriority;          //Entity management priority
+        public final long   entPriority;          //Entity management priority
 
         public Interaction(Config config)
         {
@@ -92,6 +93,12 @@ public class Properties
             this.getType = config.hasPathOrNull("getType") ?
                            config.getString("getType") :
                            "ASENTITY";
+
+            // ASMEMBER specifies that only individual members will be retrieve.
+            // ASENTITY specifies entities will be retrieve.
+            this.searchType = config.hasPathOrNull("searchType") ?
+                           config.getString("searchType") :
+                           "ASMEMBER";
 
             // Set a segment code filter to limit output to specific segments.
             // MEMHEAD, MEMATTR, MEMNAME, MEMADDR, MEMPHONE, MEMIDENT, MEMDATE
@@ -132,8 +139,8 @@ public class Properties
                               -1;
 
             this.entPriority = config.hasPathOrNull("entityPriority") ?
-                              config.getInt("entityPriority") :
-                              0;
+                               config.getInt("entityPriority") :
+                               0;
 
             this.attrbuteRows = config.hasPathOrNull("attributeRows") ?
                                 config.getConfigList("attributeRows") :
@@ -144,7 +151,7 @@ public class Properties
     public static class AttributeRow
     {
         public final Map<String, ConfigValue> attributes;
-        public final String                              code;
+        public final String                   code;
 
         public AttributeRow(Config config)
         {

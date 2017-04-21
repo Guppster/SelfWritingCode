@@ -2,11 +2,12 @@ package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
 import com.typesafe.config.ConfigValue;
-import madison.mpi.*;
+import madison.mpi.DicStore;
+import madison.mpi.MemAttrRow;
 
 import java.util.Map;
 
-public class IxnMemPutTemplate extends IxnMemTemplate
+public class IxnMemSearchTemplate extends IxnMemTemplate
 {
     @Override
     public void initialize()
@@ -22,13 +23,10 @@ public class IxnMemPutTemplate extends IxnMemTemplate
 
         addDictionaryAttributes(config);
 
-        if(config.interaction.entPriority != 0)
-        {
-            main.addStatement("ixn.setEntPrior($L)", config.interaction.entPriority);
-        }
+        main.addStatement("ixn.setSegCodeFilter($S)", config.interaction.segCodeFilter);
 
         //Execute
-        main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.INSERT_UPDATE, $T.fromString($S), $T.IMMEDIATE)", boolean.class, PutType.class, MemMode.class, config.interaction.memMode, MatchMode.class);
+        main.addStatement("$T status = ixn.execute(inputRows, outputRows, GetType.$N, SearchType.$N, outputAUDRows)", boolean.class, config.interaction.getType, config.interaction.searchType);
     }
 
     @Override

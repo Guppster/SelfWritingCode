@@ -45,18 +45,20 @@ public abstract class IxnTemplate implements Template
         ixnClass.addField(String.class, "user", Modifier.PRIVATE);
         ixnClass.addField(String.class, "pass", Modifier.PRIVATE);
         ixnClass.addField(Integer.class, "port", Modifier.PRIVATE);
+        ixnClass.addField(Context.class, "context", Modifier.PRIVATE, Modifier.STATIC);
+        ixnClass.addField(ixnType, "ixn", Modifier.PRIVATE, Modifier.STATIC);
 
         //Add context initialization to the constructor
         constructor
                 .addStatement("this.$N = $S", "host", config.context.host)
                 .addStatement("this.$N = $S", "user", config.context.user)
                 .addStatement("this.$N = $S", "pass", config.context.pass)
-                .addStatement("this.$N = $S", "port", config.context.port)
-                .addStatement("$1T context = new $1T($2N,$3N,$4N,$5N)", Context.class, "host", "user", "pass", "port")
+                .addStatement("this.$N = $L", "port", config.context.port)
+                .addStatement("$1T context = new $1T($2N,$3N,$4N,$5N)", Context.class, "host", "port", "user", "pass")
                 .beginControlFlow("if(!context.isConnected())")
                 .addStatement("$T.err.println($S)", System.class, "Unable to get a Context")
                 .endControlFlow()
-                .addStatement("$1T ixn = new $1T($2N)", ixnType, "context");
+                .addStatement("ixn = new $T($N)", ixnType, "context");
     }
 
     @Override
@@ -72,6 +74,7 @@ public abstract class IxnTemplate implements Template
     @Override
     public void construct()
     {
+        ixnClass.addMethod(constructor.build());
         ixnClass.addMethod(main.build());
     }
 }
