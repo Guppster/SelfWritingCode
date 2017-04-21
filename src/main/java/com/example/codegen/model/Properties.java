@@ -1,18 +1,35 @@
 package com.example.codegen.model;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigValue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Properties
 {
-    public final Properties.Context     context;
-    public final Properties.Interaction interaction;
-    public final String                 interactionName;
+    public final Properties.Context            context;
+    public final Properties.Interaction        interaction;
+    public final List<Properties.AttributeRow> rows;
+    public final String                        interactionName;
 
     public Properties(Config c)
     {
         this.context = new Properties.Context(c.getConfig("context"));
         this.interactionName = c.getString("interaction name");
         this.interaction = new Properties.Interaction(c.getConfig("interaction"));
+        this.rows = new ArrayList<>();
+
+        for (Config row : this.interaction.attrbuteRows)
+        {
+            rows.add(new AttributeRow(row));
+        }
+
+        System.out.println(this.rows.get(0).code);
+        System.out.println(this.rows.get(1).code);
+        System.out.println(this.rows.get(2).code);
     }
 
     public static class Context
@@ -31,8 +48,12 @@ public class Properties
         }
     }
 
+
     public static class Interaction
     {
+
+        public final List<? extends Config> attrbuteRows;       //Defines the rows used by the interaction
+
         public final String entType;            //Entity type
         public final String memType;            //Member Type
         public final String memSrcCode;         //Member source code
@@ -94,6 +115,7 @@ public class Properties
             this.memRecNum = config.hasPathOrNull("member record number") ?
                              config.getInt("member record number") :
                              -1;
+
             this.entRecNum = config.hasPathOrNull("entity record number") ?
                              config.getInt("entity record number") :
                              -1;
@@ -101,6 +123,20 @@ public class Properties
             this.taskRecNum = config.hasPathOrNull("task record number") ?
                               config.getInt("task record number") :
                               -1;
+
+            this.attrbuteRows = config.getConfigList("attributeRows");
+        }
+    }
+
+    public static class AttributeRow
+    {
+        public final Set<Map.Entry<String, ConfigValue>> attributes;
+        public final String                              code;
+
+        public AttributeRow(Config config)
+        {
+            this.code = config.getString("code");
+            this.attributes = config.getConfig("attributes").root().entrySet();
         }
     }
 }
