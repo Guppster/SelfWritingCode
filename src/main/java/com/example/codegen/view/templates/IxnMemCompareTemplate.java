@@ -20,9 +20,6 @@ public class IxnMemCompareTemplate extends IxnMemTemplate
         //Call the IxnMem generate
         super.generate(config);
 
-        main
-                .addStatement("$1T memHead2 = new $1T()", MemHead.class)
-
         //Execute
         main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.INSERT_UPDATE, $T.fromString($S), $T.IMMEDIATE)", boolean.class, PutType.class, MemMode.class, config.interaction.memMode, MatchMode.class);
     }

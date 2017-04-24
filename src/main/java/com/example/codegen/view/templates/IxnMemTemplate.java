@@ -28,33 +28,37 @@ public abstract class IxnMemTemplate extends IxnTemplate
 
         initializeInputRows(config);
 
-        main.addStatement("inputRows.addRow(memHead)");
+
     }
 
     private void initializeInputRows(Properties config)
     {
-        setKey(config);
+        for (Properties.InputRow row : config.inputRows)
+        {
+            setKey(row.name, row);
+            main.addStatement("inputRows.addRow($N)", row.name);
+        }
     }
 
-    private void setKey(String headName, Properties.MemHead memHead)
+    private void setKey(String headName, Properties.InputRow memHead)
     {
         //Use provided information to generate interaction in different ways
         if (memHead.memRecNum > 0)
         {
             main
                     .addStatement("keyType = KeyType.MEMRECNO")
-                    .addStatement("$S.setMemRecno($L)", headName, memHead.memRecNum);
+                    .addStatement("$N.setMemRecno($L)", headName, memHead.memRecNum);
         } else if (memHead.memIDNum != null && memHead.memSrcCode != null)
         {
             main
                     .addStatement("keyType = KeyType.MEMIDNUM")
-                    .addStatement("$S.setMemIdnum($S)", headName, memHead.memIDNum)
-                    .addStatement("$S.setSrcCode($S)", headName, memHead.memSrcCode);
+                    .addStatement("$N.setMemIdnum($S)", headName, memHead.memIDNum)
+                    .addStatement("$N.setSrcCode($S)", headName, memHead.memSrcCode);
         } else if (memHead.entRecNum > 0)
         {
             main
                     .addStatement("keyType = KeyType.ENTRECNO")
-                    .addStatement("$S.setEntRecnos(new $N{$L}", headName, Long.class, memHead.entRecNum);
+                    .addStatement("$N.setEntRecnos(new $N{$L}", headName, Long.class, memHead.entRecNum);
         }
 
     }

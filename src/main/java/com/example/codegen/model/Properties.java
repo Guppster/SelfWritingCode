@@ -149,9 +149,14 @@ public class Properties
         public final long   entRecNum;          //Entity record number
         public final String memSrcCode;         //Member source code
         public final String memIDNum;           //Member ID Number
+        public final String name;               //Any name to identify this row in code
 
         public InputRow(Config config)
         {
+
+            this.name = config.hasPathOrNull("name") ?
+                        config.getString("name") :
+                        null;
 
             this.memSrcCode = config.hasPathOrNull("memberSourceCode") ?
                               config.getString("memberSourceCode") :
