@@ -12,13 +12,13 @@ import javax.lang.model.element.Modifier;
 public abstract class IxnTemplate implements Template
 {
     //The class to which child classes will add to
-    protected TypeSpec.Builder ixnClass;
+    TypeSpec.Builder ixnClass;
 
     //The constructor
-    protected MethodSpec.Builder constructor;
+    MethodSpec.Builder constructor;
 
     //The main method to which child classes will add to
-    protected MethodSpec.Builder main;
+    MethodSpec.Builder main;
 
     @Override
     public void initialize()

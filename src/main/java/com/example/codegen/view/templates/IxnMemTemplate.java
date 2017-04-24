@@ -1,7 +1,6 @@
 package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
-import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 import madison.mpi.*;
 import madison.util.SetterException;
@@ -27,26 +26,37 @@ public abstract class IxnMemTemplate extends IxnTemplate
                 .addStatement("ixn.setEntType($S)", config.interaction.entType)
                 .addStatement("ixn.setMemType($S)", config.interaction.memType);
 
-         //Use provided information to generate interaction in different ways
-        if (config.interaction.memRecNum > 0)
+        initializeInputRows(config);
+
+        main.addStatement("inputRows.addRow(memHead)");
+    }
+
+    private void initializeInputRows(Properties config)
+    {
+        setKey(config);
+    }
+
+    private void setKey(String headName, Properties.MemHead memHead)
+    {
+        //Use provided information to generate interaction in different ways
+        if (memHead.memRecNum > 0)
         {
             main
                     .addStatement("keyType = KeyType.MEMRECNO")
-                    .addStatement("memHead.setMemRecno($L)", config.interaction.memRecNum);
-        } else if (config.interaction.memIDNum != null && config.interaction.memSrcCode != null)
+                    .addStatement("$S.setMemRecno($L)", headName, memHead.memRecNum);
+        } else if (memHead.memIDNum != null && memHead.memSrcCode != null)
         {
             main
                     .addStatement("keyType = KeyType.MEMIDNUM")
-                    .addStatement("memHead.setMemIdnum($S)", config.interaction.memIDNum)
-                    .addStatement("memHead.setSrcCode($S)", config.interaction.memSrcCode);
-        } else if (config.interaction.entRecNum > 0)
+                    .addStatement("$S.setMemIdnum($S)", headName, memHead.memIDNum)
+                    .addStatement("$S.setSrcCode($S)", headName, memHead.memSrcCode);
+        } else if (memHead.entRecNum > 0)
         {
             main
                     .addStatement("keyType = KeyType.ENTRECNO")
-                    .addStatement("memHead.setEntRecnos(new $N{$L}", Long.class, config.interaction.entRecNum);
+                    .addStatement("$S.setEntRecnos(new $N{$L}", headName, Long.class, memHead.entRecNum);
         }
 
-        main.addStatement("inputRows.addRow(memHead)");
     }
 
     void addDictionaryAttributes(Properties config)
@@ -64,7 +74,7 @@ public abstract class IxnMemTemplate extends IxnTemplate
         main.addStatement("$T tempAttribute", MemAttrRow.class);
 
         //For each attributeRows, assign its attributes and add the row to the input list
-        for (Properties.AttributeRow row : config.rows)
+        for (Properties.AttributeRow row : config.attributeRows)
         {
             main.addStatement("tempAttribute = dictionary.createMemAttrRowByCode($S, memHead)", row.code);
 

@@ -9,7 +9,7 @@ import javax.tools.*;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.Collections;
 
 public class Controller
 {
@@ -34,11 +34,13 @@ public class Controller
         //Run the program
         JavaFileObject file = new JavaSourceFromString("Interaction", fileString);
 
-        Iterable<? extends JavaFileObject> compilationUnits = Arrays.asList(file);
+        Iterable<? extends JavaFileObject> compilationUnits = Collections.singletonList(file);
         JavaCompiler.CompilationTask       task             = compiler.getTask(null, null, diagnostics, null, null, compilationUnits);
 
         boolean success = task.call();
-        for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
+
+        for (Diagnostic diagnostic : diagnostics.getDiagnostics())
+        {
             System.out.println(diagnostic.getCode());
             System.out.println(diagnostic.getKind());
             System.out.println(diagnostic.getPosition());
@@ -48,11 +50,14 @@ public class Controller
             System.out.println(diagnostic.getMessage(null));
 
         }
+
         System.out.println("Success: " + success);
 
-        if (success) {
+        if (success)
+        {
             try {
-                Class.forName("Interaction").getDeclaredMethod("main", new Class[] { String[].class })
+                Class.forName("Interaction")
+                        .getDeclaredMethod("main", new Class[] { String[].class })
                         .invoke(null, new Object[] { null });
             } catch (ClassNotFoundException e) {
                 System.err.println("Class not found: " + e);

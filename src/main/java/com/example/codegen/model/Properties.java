@@ -7,27 +7,39 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static com.typesafe.config.ConfigUtil.splitPath;
-
 public class Properties
 {
+    //Declare fields
     public final Properties.Context            context;
     public final Properties.Interaction        interaction;
-    public final List<Properties.AttributeRow> rows;
+    public final List<Properties.AttributeRow> attributeRows;
+    public final List<Properties.InputRow>     inputRows;
     public final String                        interactionName;
 
     public Properties(Config c)
     {
+        //Initialize fields
         this.context = new Properties.Context(c.getConfig("context"));
         this.interactionName = c.getString("interaction name");
         this.interaction = new Properties.Interaction(c.getConfig("interaction"));
-        this.rows = new ArrayList<>();
+        this.attributeRows = new ArrayList<>();
+        this.inputRows = new ArrayList<>();
 
+        //Initialize the input row list
+        if (this.interaction.inputRows != null)
+        {
+            for (Config row : this.interaction.inputRows)
+            {
+                inputRows.add(new InputRow(row));
+            }
+        }
+
+        //Initialize the attribute row list
         if (this.interaction.attrbuteRows != null)
         {
             for (Config row : this.interaction.attrbuteRows)
             {
-                rows.add(new AttributeRow(row));
+                attributeRows.add(new AttributeRow(row));
             }
         }
     }
@@ -48,16 +60,13 @@ public class Properties
         }
     }
 
-
     public static class Interaction
     {
-
-        public final List<? extends Config> attrbuteRows;       //Defines the rows used by the interaction
+        public final List<? extends Config> inputRows;          //Defines the inputRows used by the interaction
+        public final List<? extends Config> attrbuteRows;       //Defines the attributeRows used by the interaction
 
         public final String entType;            //Entity type
         public final String memType;            //Member Type
-        public final String memSrcCode;         //Member source code
-        public final String memIDNum;           //Member ID Number
         public final String memMode;            //Member update mode
         public final String segCodeFilter;      //Filter specfic segments
         public final String recStatusFilter;    //Filter record status indicators
@@ -65,8 +74,6 @@ public class Properties
         public final String compositeView;      //Set a composite view
         public final String getType;            //ASMEMBER or ASENTITY (single member or single entity)
         public final String searchType;            //ASMEMBER or ASENTITY (single member or single entity)
-        public final long   memRecNum;          //Member record number
-        public final long   entRecNum;          //Entity record number
         public final long   taskRecNum;         //Task record number
         public final long   entPriority;          //Entity management priority
 
@@ -84,10 +91,6 @@ public class Properties
                            config.getString("memberMode") :
                            "Partial";
 
-            this.memSrcCode = config.hasPathOrNull("memberSourceCode") ?
-                              config.getString("memberSourceCode") :
-                              null;
-
             // ASMEMBER specifies that only individual members will be retrieve.
             // ASENTITY specifies entities will be retrieve.
             this.getType = config.hasPathOrNull("getType") ?
@@ -97,8 +100,8 @@ public class Properties
             // ASMEMBER specifies that only individual members will be retrieve.
             // ASENTITY specifies entities will be retrieve.
             this.searchType = config.hasPathOrNull("searchType") ?
-                           config.getString("searchType") :
-                           "ASMEMBER";
+                              config.getString("searchType") :
+                              "ASMEMBER";
 
             // Set a segment code filter to limit output to specific segments.
             // MEMHEAD, MEMATTR, MEMNAME, MEMADDR, MEMPHONE, MEMIDENT, MEMDATE
@@ -122,18 +125,6 @@ public class Properties
                                  config.getString("composite view") :
                                  null;
 
-            this.memIDNum = config.hasPathOrNull("memberIDNumber") ?
-                            config.getString("memberIDNumber") :
-                            null;
-
-            this.memRecNum = config.hasPathOrNull("member record number") ?
-                             config.getInt("member record number") :
-                             -1;
-
-            this.entRecNum = config.hasPathOrNull("entity record number") ?
-                             config.getInt("entity record number") :
-                             -1;
-
             this.taskRecNum = config.hasPathOrNull("task record number") ?
                               config.getInt("task record number") :
                               -1;
@@ -145,6 +136,38 @@ public class Properties
             this.attrbuteRows = config.hasPathOrNull("attributeRows") ?
                                 config.getConfigList("attributeRows") :
                                 null;
+
+            this.inputRows = config.hasPathOrNull("inputRows") ?
+                             config.getConfigList("inputRows") :
+                             null;
+        }
+    }
+
+    public static class InputRow
+    {
+        public final long   memRecNum;          //Member record number
+        public final long   entRecNum;          //Entity record number
+        public final String memSrcCode;         //Member source code
+        public final String memIDNum;           //Member ID Number
+
+        public InputRow(Config config)
+        {
+
+            this.memSrcCode = config.hasPathOrNull("memberSourceCode") ?
+                              config.getString("memberSourceCode") :
+                              null;
+
+            this.memIDNum = config.hasPathOrNull("memberIDNumber") ?
+                            config.getString("memberIDNumber") :
+                            null;
+
+            this.memRecNum = config.hasPathOrNull("member record number") ?
+                             config.getInt("member record number") :
+                             -1;
+
+            this.entRecNum = config.hasPathOrNull("entity record number") ?
+                             config.getInt("entity record number") :
+                             -1;
         }
     }
 
