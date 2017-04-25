@@ -60,7 +60,6 @@ public abstract class IxnMemTemplate extends IxnTemplate
                     .addStatement("keyType = KeyType.ENTRECNO")
                     .addStatement("$N.setEntRecnos(new $N{$L}", headName, Long.class, memHead.entRecNum);
         }
-
     }
 
     void addDictionaryAttributes(Properties config)

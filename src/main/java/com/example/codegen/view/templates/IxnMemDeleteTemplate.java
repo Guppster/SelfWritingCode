@@ -2,7 +2,7 @@ package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
 
-public class IxnMemCompareTemplate extends IxnMemTemplate
+public class IxnMemDeleteTemplate extends IxnMemTemplate
 {
     @Override
     public void initialize()
