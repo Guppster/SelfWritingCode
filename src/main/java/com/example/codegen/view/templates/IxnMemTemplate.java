@@ -21,21 +21,21 @@ public abstract class IxnMemTemplate extends IxnTemplate
                 .addStatement("$1T inputRows = new $1T()", MemRowList.class)
                 .addStatement("$1T outputRows = new $1T()", MemRowList.class)
                 .addStatement("$1T outputAUDRows = new $1T()", MemRowList.class)
-                .addStatement("$1T memHead = new $1T()", MemHead.class)
                 .addStatement("$T keyType = KeyType.UNKNOWN", KeyType.class)
                 .addStatement("ixn.setEntType($S)", config.interaction.entType)
                 .addStatement("ixn.setMemType($S)", config.interaction.memType);
 
         initializeInputRows(config);
-
-
     }
 
     private void initializeInputRows(Properties config)
     {
         for (Properties.InputRow row : config.inputRows)
         {
+            main.addStatement("$1T $2N = new $1T()", MemHead.class, row.name);
+
             setKey(row.name, row);
+
             main.addStatement("inputRows.addRow($N)", row.name);
         }
     }

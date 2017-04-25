@@ -1,10 +1,7 @@
 package com.example.codegen.view.templates;
 
 import com.example.codegen.model.Properties;
-import madison.mpi.MatchMode;
-import madison.mpi.MemHead;
-import madison.mpi.MemMode;
-import madison.mpi.PutType;
+import madison.mpi.*;
 
 public class IxnMemCompareTemplate extends IxnMemTemplate
 {
@@ -21,7 +18,7 @@ public class IxnMemCompareTemplate extends IxnMemTemplate
         super.generate(config);
 
         //Execute
-        main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.INSERT_UPDATE, $T.fromString($S), $T.IMMEDIATE)", boolean.class, PutType.class, MemMode.class, config.interaction.memMode, MatchMode.class);
+        main.addStatement("$T status = ixn.execute(inputRows, outputRows, keyType)", boolean.class);
     }
 
     @Override
