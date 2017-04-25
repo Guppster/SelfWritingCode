@@ -3,7 +3,9 @@ package com.example.codegen.view.templates;
 import com.example.codegen.model.Properties;
 import com.typesafe.config.ConfigValue;
 import madison.mpi.DicStore;
+import madison.mpi.GetType;
 import madison.mpi.MemAttrRow;
+import madison.mpi.SearchType;
 
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class IxnMemSearchTemplate extends IxnMemTemplate
         main.addStatement("ixn.setSegCodeFilter($S)", config.interaction.segCodeFilter);
 
         //Execute
-        main.addStatement("$T status = ixn.execute(inputRows, outputRows, GetType.$N, SearchType.$N, outputAUDRows)", boolean.class, config.interaction.getType, config.interaction.searchType);
+        main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.$N, $T.$N, outputAUDRows)", boolean.class, GetType.class, config.interaction.getType, SearchType.class, config.interaction.searchType);
     }
 
     @Override

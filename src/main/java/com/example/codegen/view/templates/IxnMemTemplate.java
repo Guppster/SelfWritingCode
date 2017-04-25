@@ -20,7 +20,7 @@ public abstract class IxnMemTemplate extends IxnTemplate
         main
                 .addStatement("$1T inputRows = new $1T()", MemRowList.class)
                 .addStatement("$1T outputRows = new $1T()", MemRowList.class)
-                .addStatement("$1T outputAUDRows = new $1T()", MemRowList.class)
+                .addStatement("$1T outputAUDRows = new $1T()", AudRowList.class)
                 .addStatement("$T keyType = KeyType.UNKNOWN", KeyType.class)
                 .addStatement("ixn.setEntType($S)", config.interaction.entType)
                 .addStatement("ixn.setMemType($S)", config.interaction.memType);
