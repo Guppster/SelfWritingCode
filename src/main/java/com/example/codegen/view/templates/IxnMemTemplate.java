@@ -36,6 +36,8 @@ public abstract class IxnMemTemplate extends IxnTemplate
 
             setKey(row.name, row);
 
+            addDictionaryAttributes(row.name, row);
+
             main.addStatement("inputRows.addRow($N)", row.name);
         }
     }
@@ -62,7 +64,7 @@ public abstract class IxnMemTemplate extends IxnTemplate
         }
     }
 
-    void addDictionaryAttributes(Properties config)
+    void addDictionaryAttributes(String headName, Properties.InputRow memHead)
     {
         //dicstore creation throws IOException
         main.addException(IOException.class);
@@ -77,9 +79,9 @@ public abstract class IxnMemTemplate extends IxnTemplate
         main.addStatement("$T tempAttribute", MemAttrRow.class);
 
         //For each attributeRows, assign its attributes and add the row to the input list
-        for (Properties.AttributeRow row : config.attributeRows)
+        for (Properties.AttributeRow row : memHead.attributeRows)
         {
-            main.addStatement("tempAttribute = dictionary.createMemAttrRowByCode($S, memHead)", row.code);
+            main.addStatement("tempAttribute = dictionary.createMemAttrRowByCode($S, $N)", row.code, headName);
 
             for (Map.Entry<String, ConfigValue> entry : row.attributes.entrySet())
             {

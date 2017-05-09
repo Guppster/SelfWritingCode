@@ -20,8 +20,6 @@ public class IxnMemPutTemplate extends IxnMemTemplate
         //Call the IxnMem generate
         super.generate(config);
 
-        addDictionaryAttributes(config);
-
         if(config.interaction.entPriority != 0)
         {
             main.addStatement("ixn.setEntPrior($L)", config.interaction.entPriority);

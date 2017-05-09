@@ -23,8 +23,6 @@ public class IxnMemSearchTemplate extends IxnMemTemplate
         //Call the IxnMem generate
         super.generate(config);
 
-        addDictionaryAttributes(config);
-
         main
                 .addStatement("ixn.setMemStatFilter($S)", config.interaction.memStatusFilter)
                 .addStatement("ixn.setRecStatFilter($S)", config.interaction.recStatusFilter)

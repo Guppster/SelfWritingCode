@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class TemplateComposer
 {
-    private Template template;
+    private Template   template;
     private Properties config;
 
     public TemplateComposer(Properties config)

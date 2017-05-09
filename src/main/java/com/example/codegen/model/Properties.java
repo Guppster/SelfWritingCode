@@ -3,18 +3,19 @@ package com.example.codegen.model;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class Properties
 {
     //Declare fields
-    public final Properties.Context            context;
-    public final Properties.Interaction        interaction;
-    public final List<Properties.AttributeRow> attributeRows;
-    public final List<Properties.InputRow>     inputRows;
-    public final String                        interactionName;
+    public final Properties.Context        context;
+    public final Properties.Interaction    interaction;
+    public final List<Properties.InputRow> inputRows;
+    public final String                    interactionName;
 
     public Properties(Config c)
     {
@@ -22,7 +23,6 @@ public class Properties
         this.context = new Properties.Context(c.getConfig("context"));
         this.interactionName = c.getString("interaction name");
         this.interaction = new Properties.Interaction(c.getConfig("interaction"));
-        this.attributeRows = new ArrayList<>();
         this.inputRows = new ArrayList<>();
 
         //Initialize the input row list
@@ -34,14 +34,6 @@ public class Properties
             }
         }
 
-        //Initialize the attribute row list
-        if (this.interaction.attrbuteRows != null)
-        {
-            for (Config row : this.interaction.attrbuteRows)
-            {
-                attributeRows.add(new AttributeRow(row));
-            }
-        }
     }
 
     public static class Context
@@ -63,7 +55,6 @@ public class Properties
     public static class Interaction
     {
         public final List<? extends Config> inputRows;          //Defines the inputRows used by the interaction
-        public final List<? extends Config> attrbuteRows;       //Defines the attributeRows used by the interaction
 
         public final String entType;            //Entity type
         public final String memType;            //Member Type
@@ -133,9 +124,6 @@ public class Properties
                                config.getInt("entityPriority") :
                                0;
 
-            this.attrbuteRows = config.hasPathOrNull("attributeRows") ?
-                                config.getConfigList("attributeRows") :
-                                null;
 
             this.inputRows = config.hasPathOrNull("inputRows") ?
                              config.getConfigList("inputRows") :
@@ -151,8 +139,12 @@ public class Properties
         public final String memIDNum;           //Member ID Number
         public final String name;               //Any name to identify this row in code
 
+        public final List<? extends Config>        specifiedAttributes;       //Defines the attributeRows used by the interaction
+        public final List<Properties.AttributeRow> attributeRows;
+
         public InputRow(Config config)
         {
+            this.attributeRows = new ArrayList<>();
 
             this.name = config.hasPathOrNull("name") ?
                         config.getString("name") :
@@ -173,6 +165,19 @@ public class Properties
             this.entRecNum = config.hasPathOrNull("entity record number") ?
                              config.getInt("entity record number") :
                              -1;
+
+            this.specifiedAttributes = config.hasPathOrNull("attributeRows") ?
+                                       config.getConfigList("attributeRows") :
+                                       null;
+
+            //Initialize the attribute row list
+            if (this.specifiedAttributes != null)
+            {
+                for (Config row : this.specifiedAttributes)
+                {
+                    attributeRows.add(new AttributeRow(row));
+                }
+            }
         }
     }
 
