@@ -22,11 +22,11 @@ public class IxnMemPutTemplate extends IxnMemTemplate
 
         if(config.interaction.entPriority != 0)
         {
-            main.addStatement("ixn.setEntPrior($L)", config.interaction.entPriority);
+            main.addStatement("ixn.setEntPrior(vars.get(\"ENTPRIORITY\"))");
         }
 
         //Execute
-        main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.INSERT_UPDATE, $T.fromString($S), $T.IMMEDIATE)", boolean.class, PutType.class, MemMode.class, config.interaction.memMode, MatchMode.class);
+        main.addStatement("$T status = ixn.execute(inputRows, outputRows, $T.INSERT_UPDATE, $T.fromString(vars.get(\"MEMMODE\")), $T.IMMEDIATE)", boolean.class, PutType.class, MemMode.class, MatchMode.class);
     }
 
     @Override

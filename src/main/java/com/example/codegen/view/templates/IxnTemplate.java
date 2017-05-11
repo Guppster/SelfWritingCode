@@ -8,6 +8,8 @@ import com.squareup.javapoet.TypeSpec;
 import madison.mpi.Context;
 
 import javax.lang.model.element.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class IxnTemplate implements Template
 {
@@ -27,10 +29,10 @@ public abstract class IxnTemplate implements Template
         constructor = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
 
-        main = MethodSpec.methodBuilder("main")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(void.class)
-                .addParameter(String[].class, "args");
+        main = MethodSpec.methodBuilder("execute")
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(Map.class, "input")
+                .returns(void.class);
 
         ixnClass = TypeSpec.classBuilder("Interaction")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
@@ -59,6 +61,9 @@ public abstract class IxnTemplate implements Template
                 .addStatement("$T.err.println($S)", System.class, "Unable to get a Context")
                 .endControlFlow()
                 .addStatement("ixn = new $T($N)", ixnType, "context");
+
+        main
+                .addStatement("Map<String,String> vars = new $T(input)", HashMap.class);
     }
 
     @Override
