@@ -85,7 +85,7 @@ public abstract class IxnMemTemplate extends IxnTemplate
 
             for (Map.Entry<String, ConfigValue> entry : row.attributes.entrySet())
             {
-                main.addStatement("tempAttribute.setString($S,$S)", entry.getKey(), entry.getValue().unwrapped());
+                main.addStatement("tempAttribute.setString($S,vars.get($S))", entry.getKey(), entry.getValue().unwrapped());
             }
 
             main.addStatement("inputRows.addRow(tempAttribute)");
